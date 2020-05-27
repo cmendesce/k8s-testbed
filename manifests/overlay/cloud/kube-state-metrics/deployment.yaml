@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-state-metrics
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kops.k8s.io/instancegroup: "monitoring"

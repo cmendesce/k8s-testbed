@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-ingress
+spec:
+  template:
+    spec:
+      nodeSelector:
+        localhost.k8s.io/layer: ingress
