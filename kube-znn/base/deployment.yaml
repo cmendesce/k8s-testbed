@@ -22,9 +22,16 @@ spec:
         - name: nginx-config-volume
           configMap:
             name: nginx-config
-        - name: nginx-exporter-volume
-          configMap:
-            name: nginx-exporter
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: localhost.k8s.io/layer
+                operator: In
+                values:
+                - web
       containers:
         - image: cmendes/znn:400k
           name: znn
@@ -53,13 +60,13 @@ spec:
             - name: nginx-config-volume
               mountPath: /usr/local/openresty/nginx/conf/nginx.conf
               subPath: nginx.conf
-            - name: nginx-exporter-volume
+            - name: nginx-config-volume
               mountPath: /etc/nginx/nginx-lua-prometheus/prometheus_resty_counter.lua
               subPath: prometheus_resty_counter.lua
-            - name: nginx-exporter-volume
+            - name: nginx-config-volume
               mountPath: /etc/nginx/nginx-lua-prometheus/prometheus_keys.lua
               subPath: prometheus_keys.lua
-            - name: nginx-exporter-volume
+            - name: nginx-config-volume
               mountPath: /etc/nginx/nginx-lua-prometheus/prometheus.lua
               subPath: prometheus.lua
           ports:

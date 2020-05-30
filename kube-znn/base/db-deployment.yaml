@@ -17,8 +17,18 @@ spec:
       - name: init-db-config
         configMap:
           name: init-db-config
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: localhost.k8s.io/layer
+                operator: In
+                values:
+                - db
       containers:
-      - image: mysql:5.7
+      - image: mysql:5.6
         name: mysql
         volumeMounts:
         - name: init-db-config
