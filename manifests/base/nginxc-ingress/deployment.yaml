@@ -16,8 +16,18 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9113"
     spec:
-      nodeSelector:
-        localhost.k8s.io/layer: ingress
+
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: localhost.k8s.io/layer
+                operator: In
+                values:
+                - ingress
+                
       serviceAccountName: nginx-ingress
       containers:
       - image: nginx/nginx-ingress:1.7.0

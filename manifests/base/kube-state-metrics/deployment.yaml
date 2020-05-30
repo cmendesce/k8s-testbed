@@ -15,6 +15,16 @@ spec:
         app.kubernetes.io/name: kube-state-metrics
         app.kubernetes.io/version: 1.9.5
     spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: localhost.k8s.io/layer
+                operator: In
+                values:
+                - monitoring
       containers:
       - image: quay.io/coreos/kube-state-metrics:v1.9.5
         livenessProbe:
