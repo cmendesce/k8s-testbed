@@ -1,9 +1,0 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: kube-znn-db
-spec:
-  template:
-    spec:
-      nodeSelector:
-        localhost.k8s.io/layer: "db"

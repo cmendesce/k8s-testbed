@@ -4,4 +4,4 @@ metadata:
   name: ingress-kube-znn
 spec:
   rules:
-  - host: "nginx-ingress.default.svc"
+  - host: "localhost"
