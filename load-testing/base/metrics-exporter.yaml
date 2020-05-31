@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metrics-exporter
+  labels:
+    app: metrics-exporter
+spec:
+  selector:
+    matchLabels:
+      app: metrics-exporter
+  template:
+    metadata:
+      labels:
+        app: metrics-exporter
+      annotations:
+        prometheus.io/scrape: "false"
+    spec:
+      volumes:
+      - name: metrics-config
+        configMap:
+          name: metrics-config
+      - name: aws-credentials
+        configMap:
+          name: aws-credentials
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: localhost.k8s.io/layer
+                operator: In
+                values:
+                - testing
+      containers:
+      - name: metrics-exporter
+        image: cmendes/prometheus-metrics-exporter:latest
+        imagePullPolicy: Always
+        ports:
+        - name: web
+          containerPort: 80
+        volumeMounts:
+        - name: metrics-config
+          mountPath: /opt/config/metrics.conf
+          subPath: metrics.conf
+        env:
+        - name: PROMETHEUS_HOST
+          value: http://prometheus.default.svc:9090
+        - name: METRICS_FILE
+          value: "/opt/config/metrics.conf"
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            configMapKeyRef:
+              name: aws-credentials
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: aws-credentials
+              key: AWS_SECRET_ACCESS_KEY
+        - name: BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: aws-credentials
+              key: BUCKET_NAME

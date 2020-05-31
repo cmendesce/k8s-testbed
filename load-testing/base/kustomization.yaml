@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+- name: aws-credentials
+  envs: 
+  - aws.env
+- name: load-testing-script
+  files:
+  - load-testing.js
+- name: metrics-config
+  files:
+  - metrics.conf
+resources:
+- k6-job.yaml
+- metrics-exporter.yaml
+- metrics-exporter-svc.yaml

@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k6
+spec:
+  template:
+    spec:
+      volumes:
+      - name: script
+        configMap:
+          name: load-testing-script
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: localhost.k8s.io/layer
+                operator: In
+                values:
+                - testing
+      containers:
+      - name: k6
+        image: loadimpact/k6
+        args:
+        - run
+        - /load-testing.js
+        env:
+          - name: METRICS_EXPORTER_HOST
+            value: http://metrics-exporter.default.svc
+        volumeMounts:
+        - name: script
+          mountPath: /load-testing.js
+          subPath: load-testing.js
+      restartPolicy: Never
+  backoffLimit: 1

@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+- name: load-testing-script
+  behavior: replace
+  files:
+  - load-testing.js
+- name: metrics-config
+  behavior: replace
+  files:
+  - metrics.conf
+bases:
+- ../../base
