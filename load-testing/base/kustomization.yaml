@@ -4,6 +4,9 @@ configMapGenerator:
 - name: aws-credentials
   envs: 
   - aws.env
+- name: k6-environment
+  envs: 
+  - k6.env
 - name: load-testing-script
   files:
   - load-testing.js

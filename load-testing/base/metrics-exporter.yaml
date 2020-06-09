@@ -58,8 +58,3 @@ spec:
             configMapKeyRef:
               name: aws-credentials
               key: AWS_SECRET_ACCESS_KEY
-        - name: BUCKET_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: aws-credentials
-              key: BUCKET_NAME

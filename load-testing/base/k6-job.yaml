@@ -9,6 +9,9 @@ spec:
       - name: script
         configMap:
           name: load-testing-script
+      - name: k6-environment
+        configMap:
+          name: k6-environment
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -28,6 +31,16 @@ spec:
         env:
           - name: METRICS_EXPORTER_HOST
             value: http://metrics-exporter.default.svc
+          - name: BUCKET_NAME
+            valueFrom: 
+              configMapKeyRef:
+                name: k6-environment
+                key: BUCKET_NAME
+          - name: TEST_NAME
+            valueFrom: 
+              configMapKeyRef:
+                name: k6-environment
+                key: TEST_NAME
         volumeMounts:
         - name: script
           mountPath: /load-testing.js

@@ -63,7 +63,8 @@ export let options = {
 
 export function setup() {
   return {
-    metrics_exporter: `${__ENV.METRICS_EXPORTER_HOST}/exports`,
+    metrics_exporter: `${__ENV.METRICS_EXPORTER_HOST}/exports/${__ENV.TEST_NAME}`,
+    bucket_name: __ENV.BUCKET_NAME,
     start: epochSeconds()
   };
 };
@@ -103,7 +104,8 @@ export function teardown(data) {
   data.end = epochSeconds();
   const payload = JSON.stringify({
     start: data.start,
-    end: data.end
+    end: data.end,
+    bucket_name: data.bucket_name
   });
 
   const params = {
