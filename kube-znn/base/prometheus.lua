@@ -71,8 +71,9 @@ local DEFAULT_ERROR_METRIC_NAME = "nginx_metric_errors_total"
 local KEY_INDEX_PREFIX = "__ngx_prom__"
 
 -- Default set of latency buckets, 5ms to 10s:
-local DEFAULT_BUCKETS = {0.005, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.2, 0.3,
-                    0.4, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 10}
+local DEFAULT_BUCKETS = {0.005, 0.006, 0.007, 0.008, 0.009, 
+                        0.01, 0.015, 0.02, 0.025, 0.030, 0.035, 0.040, 0.1, 0.2, 0.3, 
+                        0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 10}
 
 -- Generate full metric name that includes all labels.
 --
