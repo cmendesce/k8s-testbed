@@ -47,7 +47,7 @@ spec:
     anonymousAuth: false
   kubernetesApiAccess:
   - 0.0.0.0/0
-  kubernetesVersion: 1.16.9
+  kubernetesVersion: 1.16.10
   masterPublicName: api.testbed.k8s.local
   networkCIDR: 172.20.0.0/16
   networking:
