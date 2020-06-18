@@ -25,6 +25,7 @@ spec:
       containers:
       - image: cmendes/kubow:yellow
         name: kubow
+        imagePullPolicy: Always
         env:
         - name: USER_DIR
           value: "/usr/share/kubow"

@@ -12,4 +12,5 @@ kops create -f ig-kube-znn.yaml
 kops create -f ig-monitoring.yaml
 kops create -f ig-testing.yaml
 kops create -f ig-ingress.yaml
+kops create -f ig-kubow.yaml
 kops update cluster testbed.k8s.local --yes

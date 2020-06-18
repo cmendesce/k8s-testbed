@@ -1,9 +1,11 @@
 module kubow.strategies;
 import model "KubeZnnSystem:Acme" { KubeZnnSystem as M, KubernetesFam as K };
 
-define boolean textMode = M.kubeZnnD.replicasLow > 0;
-define boolean lowMode = M.kubeZnnD.replicasMid > 0;
-define boolean highMode = M.kubeZnnD.replicasHigh > 0;
+define boolean lowMode = M.kubeZnnD.replicasLow == M.kubeZnnD.desiredReplicas;
+define boolean highMode = M.kubeZnnD.replicasHigh == M.kubeZnnD.desiredReplicas;
+
+define string highModeImage = "cmendes/znn:600k";
+define string lowModeImage = "cmendes/znn:100k";
 
 tactic addReplicas(int count) {
   int replicas = M.kubeZnnD.desiredReplicas;
@@ -13,7 +15,7 @@ tactic addReplicas(int count) {
   action {
     M.scaleUp(M.kubeZnnD, count);
   }
-  effect @[10000] {
+  effect @[5000] {
     replicas' + count == M.kubeZnnD.desiredReplicas;
   }
 }
@@ -26,41 +28,32 @@ tactic removeReplicas(int count) {
   action {
     M.scaleDown(M.kubeZnnD, count);
   }
-  effect @[10000] {
+  effect @[5000] {
     replicas' - count == M.kubeZnnD.desiredReplicas;
   }
 }
 
 tactic lowerFidelity() {
   condition {
-    lowMode || highMode;
+    highMode;
   }
   action {
-    if (highMode) {
-      M.rollOut(M.kubeZnnD, "znn", "cmendes/znn:low");
-    }
-    if (lowMode) {
-      M.rollOut(M.kubeZnnD, "znn", "cmendes/znn:text");
-    }
+    M.rollOut(M.kubeZnnD, "znn", lowModeImage);
   }
   effect @[10000] {
-    br.unifor.kubow.adaptation.KubernetesUtils.containerImage(M.kubeZnnD, "znn") == "cmendes/znn:low" || br.unifor.kubow.adaptation.KubernetesUtils.containerImage(M.kubeZnnD, "znn") == "cmendes/znn:text";
+    lowMode;
   }
 }
 
 tactic raiseFidelity() {
   condition {
-    textMode || lowMode;
+    lowMode;
   }
   action {
-    if (textMode) {
-      M.rollOut(M.kubeZnnD, "znn", "cmendes/znn:low");
-    }
-    if (lowMode) {
-      M.rollOut(M.kubeZnnD, "znn", "cmendes/znn:high");
-    }
+    M.rollOut(M.kubeZnnD, "znn", highModeImage);
   }
   effect @[10000] {
-    br.unifor.kubow.adaptation.KubernetesUtils.containerImage(M.kubeZnnD, "znn") == "cmendes/znn:low" || br.unifor.kubow.adaptation.KubernetesUtils.containerImage(M.kubeZnnD, "znn") == "cmendes/znn:high";
+    highMode;
   }
 }
+

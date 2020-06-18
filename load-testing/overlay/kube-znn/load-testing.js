@@ -16,48 +16,64 @@ export let options = {
   stages: [
     {
       duration: '10s',
-      target: steps[0]
+      target: 100
     },
     {
-      duration: '30s',
-      target: steps[0]
-    },
-    {
-      duration: '10s',
-      target: steps[1]
-    },
-    {
-      duration: '60s',
-      target: steps[1]
+      duration: '50s',
+      target: 100
     },
     {
       duration: '10s',
-      target: steps[2]
+      target: 150
     },
     {
-      duration: '90s',
-      target: steps[2]
-    },
-    {
-      duration: '10s',
-      target: steps[1]
-    },
-    {
-      duration: '60s',
-      target: steps[1]
+      duration: '50s',
+      target: 150
     },
     {
       duration: '10s',
-      target: steps[0]
+      target: 200
     },
     {
-      duration: '30s',
-      target: steps[0]
+      duration: '50s',
+      target: 200
+    },
+    {
+      duration: '10s',
+      target: 250
+    },
+    {
+      duration: '50s',
+      target: 250
+    },
+    {
+      duration: '10s',
+      target: 300
+    },
+    {
+      duration: '50s',
+      target: 300
+    },
+    {
+      duration: '10s',
+      target: 200
+    },
+    {
+      duration: '50s',
+      target: 200
+    },
+    {
+      duration: '10s',
+      target: 100
+    },
+    {
+      duration: '50s',
+      target: 100
     },
     {
       duration: '10s',
       target: 0
-    },
+    }
   ]
 };
 
@@ -68,6 +84,7 @@ export function setup() {
     start: epochSeconds()
   };
 };
+
 export default function() {
   // https://k6.io/blog/how-to-generate-a-constant-request-rate-in-k6
   /**
@@ -113,6 +130,7 @@ export function teardown(data) {
       'Content-Type': 'application/json',
     },
   };
-
-  http.post(data.metrics_exporter, payload, params);
+  
+  const res = http.post(data.metrics_exporter, payload, params);
+  console.log(res.status);
 }

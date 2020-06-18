@@ -13,6 +13,8 @@ System KubeZnnSystem : KubernetesFam = new KubernetesFam extended with {
   Component kubeZnnS : ServiceT = new ServiceT extended with {
     Port apiPort  = { }
     Property name = "kube-znn";
+    Property expectedSlo = 0.95;
+    Property desiredSlo = 0.99;
   }
   Component kubeZnnD : DeploymentT = new DeploymentT extended with {
     Port apiPort  = { }
@@ -20,10 +22,9 @@ System KubeZnnSystem : KubernetesFam = new KubernetesFam extended with {
     Property namespace = "default";
     Property hasAlternativeImages = true;
     Property maxReplicas = 3;
-    Property alternativeImages = <"cmendes/kube-znn:100k","cmendes/kube-znn:400k","cmendes/kube-znn:600k">;
+    Property alternativeImages = <"cmendes/kube-znn:100k","cmendes/kube-znn:600k">;
     Property name = "kube-znn";
     Property replicasHigh = 0;
-    Property replicasMid = 0;
     Property replicasLow = 0;
 
   }
@@ -38,7 +39,7 @@ System KubeZnnSystem : KubernetesFam = new KubernetesFam extended with {
     Property selectors = <[name : string = "app";value : string = "kube-znn-db";]>;
   }
   
-  Property EXPECTED_SLO = 0.95;
+  
 
   Attachment kubeZnnDbD.sqlPort to dbServiceConnector.selectee;
   Attachment kubeZnnDbS.sqlPort to dbServiceConnector.selector;

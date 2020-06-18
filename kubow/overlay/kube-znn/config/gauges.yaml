@@ -46,17 +46,7 @@ gauge-instances:
       targetIP: "127.0.0.1"
     configValues:
       targetProbeType: default-kube-znn-replicasHigh@*
-  
-  ReplicasMidGauge:
-    type: KubowGaugeT
-    model: "KubeZnnSystem:Acme"
-    commands:
-      "setDeploymentProperty()": "kubeZnnD.setDeploymentProperty($<jsonValue>,<replicasMid>)"
-    setupValues:
-      targetIP: "127.0.0.1"
-    configValues:
-      targetProbeType: default-kube-znn-replicasMid@*
-  
+    
   ReplicasLowGauge:
     type: KubowGaugeT
     model: "KubeZnnSystem:Acme"
