@@ -11,6 +11,16 @@ spec:
       labels:
         app: kubow
     spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: localhost.k8s.io/layer
+                operator: In
+                values:
+                - kubow
       serviceAccountName: kubow-user
       volumes:
       - name: kubow-config

@@ -32,6 +32,6 @@ Family KubernetesFam = {
     Property traffic : float << default : float = 0.0; >> ;
     Property errors : float << default : float = 0.0; >> ;
     Property saturation : float << default : float = 0.0; >> ;
-    Property slo : float << default : float = 0.0; >> ;
+    Property slo : float << default : float = 1.0; >> ;
   }
 }
