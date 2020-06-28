@@ -15,10 +15,10 @@ define boolean canRemoveReplica = M.kubeZnnD.minReplicas < M.kubeZnnD.desiredRep
  * ----
  */
 strategy ImproveSlo [ sloRed ] {
-  t0: (sloRed && canAddReplica) -> addReplicas(1) @[5000 /*ms*/] {
+  t0: (sloRed && canAddReplica) -> addReplicas(1) @[20000 /*ms*/] {
     t0a: (success) -> done;
   }
-  t1: (sloRed && !canAddReplica) -> lowerFidelity() @[10000 /*ms*/] {
+  t1: (sloRed && !canAddReplica) -> lowerFidelity() @[20000 /*ms*/] {
     t1a: (success) -> done;
   }
   t2: (default) -> TNULL;
@@ -28,7 +28,7 @@ strategy ImproveSlo [ sloRed ] {
  * ----
  */
 strategy ReduceCost [ sloGreen && highMode ] {
-  t0: (sloGreen && canRemoveReplica && highMode) -> removeReplicas(1) @[10000 /*ms*/] {
+  t0: (sloGreen && canRemoveReplica && highMode) -> removeReplicas(1) @[20000 /*ms*/] {
     t0a: (success) -> done;
   }
   t1: (default) -> TNULL;
@@ -38,7 +38,7 @@ strategy ReduceCost [ sloGreen && highMode ] {
  * ----
  */
 strategy ImproveFidelity [ sloGreen && lowMode ] {
-  t0: (sloGreen && lowMode) -> raiseFidelity() @[10000 /*ms*/] {
+  t0: (sloGreen && lowMode) -> raiseFidelity() @[20000 /*ms*/] {
     t0a: (success) -> done;
   }
   t1: (default) -> TNULL;

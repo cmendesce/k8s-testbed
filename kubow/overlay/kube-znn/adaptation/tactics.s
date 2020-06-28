@@ -5,7 +5,7 @@ define boolean lowMode = M.kubeZnnD.replicasLow == M.kubeZnnD.desiredReplicas;
 define boolean highMode = M.kubeZnnD.replicasHigh == M.kubeZnnD.desiredReplicas;
 
 define string highModeImage = "cmendes/znn:600k";
-define string lowModeImage = "cmendes/znn:100k";
+define string lowModeImage = "cmendes/znn:400k";
 
 tactic addReplicas(int count) {
   int replicas = M.kubeZnnD.desiredReplicas;

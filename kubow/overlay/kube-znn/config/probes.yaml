@@ -24,7 +24,7 @@ probes:
       args.0: "default"
       args.1: "kube-znn"
       args.2: "replicasLow"
-      args.3: "count(kube_pod_container_info{image=\"cmendes/znn:100k\"})"
+      args.3: "count(kube_pod_container_info{image=\"cmendes/znn:400k\"})"
 
   SloProbe:
     alias: kube-znn.slo.probe
