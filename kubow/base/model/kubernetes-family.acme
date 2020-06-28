@@ -23,6 +23,8 @@ Family KubernetesFam = {
     Property containers : Sequence<ContainerT>;
     Property hasAlternativeImages : boolean << default : boolean = false; >> ;
     Property alternativeImages : Sequence<string>;
+    Property status : string;
+    Property lastUpdate : int;
     rule maxReplicasRule = invariant self.maxReplicas >= self.desiredReplicas;
     rule minReplicasRule = invariant self.minReplicas <= self.desiredReplicas;
   }
