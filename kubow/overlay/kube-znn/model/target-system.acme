@@ -14,7 +14,7 @@ System KubeZnnSystem : KubernetesFam = new KubernetesFam extended with {
     Port apiPort  = { }
     Property name = "kube-znn";
     Property expectedSlo = 0.95;
-    Property desiredSlo = 0.99;
+    Property desiredSlo = 0.98;
   }
   Component kubeZnnD : DeploymentT = new DeploymentT extended with {
     Port apiPort  = { }
@@ -26,6 +26,7 @@ System KubeZnnSystem : KubernetesFam = new KubernetesFam extended with {
     Property name = "kube-znn";
     Property replicasHigh = 0;
     Property replicasLow = 0;
+    Property stability = 0;
 
   }
   Connector dbConnection  = new ServiceConnectorT extended with {

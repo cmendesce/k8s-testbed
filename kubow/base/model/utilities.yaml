@@ -1,5 +1,5 @@
 model:
-  name: KubeZnnSystem
+  name: PutTargetSystemModelNameHere
   type: Acme
 utilities:
   

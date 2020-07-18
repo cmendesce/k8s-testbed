@@ -36,6 +36,16 @@ gauge-instances:
       targetIP: "127.0.0.1"
     configValues:
       targetProbeType: default-kube-znn-slo@*
+
+  TrafficGauge:
+    type: KubowGaugeT
+    model: "KubeZnnSystem:Acme"
+    commands:
+      "setServiceProperty()": "kubeZnnS.setServiceProperty($<jsonValue>,<traffic>)"
+    setupValues:
+      targetIP: "127.0.0.1"
+    configValues:
+      targetProbeType: default-kube-znn-traffic@*
   
   ReplicasHighGauge:
     type: KubowGaugeT
@@ -56,6 +66,16 @@ gauge-instances:
       targetIP: "127.0.0.1"
     configValues:
       targetProbeType: default-kube-znn-replicasLow@*
+
+  StabilityGauge:
+    type: KubowGaugeT
+    model: "KubeZnnSystem:Acme"
+    commands:
+      "setDeploymentProperty()": "kubeZnnD.setDeploymentProperty($<jsonValue>,<stability>)"
+    setupValues:
+      targetIP: "127.0.0.1"
+    configValues:
+      targetProbeType: default-kube-znn-stability@*
 
   KubeZnnInfoGauge:
     type: KubowGaugeT

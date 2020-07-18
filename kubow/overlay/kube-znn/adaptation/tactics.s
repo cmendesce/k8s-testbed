@@ -7,35 +7,37 @@ define boolean highMode = M.kubeZnnD.replicasHigh == M.kubeZnnD.desiredReplicas;
 define string highModeImage = "cmendes/znn:600k";
 define string lowModeImage = "cmendes/znn:400k";
 
-tactic addReplicas(int count) {
-  int replicas = M.kubeZnnD.desiredReplicas;
+define boolean isStable = M.kubeZnnD.stability == 0;
+
+tactic addReplica() {
+  int futureReplicas = M.kubeZnnD.desiredReplicas + 1;
   condition {
-    M.kubeZnnD.maxReplicas > M.kubeZnnD.desiredReplicas;
+    M.kubeZnnD.maxReplicas > M.kubeZnnD.desiredReplicas && isStable;
   }
   action {
-    M.scaleUp(M.kubeZnnD, count);
+    M.scaleUp(M.kubeZnnD, 1);
   }
-  effect @[5000] {
-    replicas' + count == M.kubeZnnD.desiredReplicas;
+  effect @[10000] {
+    futureReplicas' == M.kubeZnnD.desiredReplicas;
   }
 }
 
-tactic removeReplicas(int count) {
-  int replicas = M.kubeZnnD.desiredReplicas;
+tactic removeReplica() {
+  int futureReplicas = M.kubeZnnD.desiredReplicas - 1;
   condition {
-    M.kubeZnnD.minReplicas < M.kubeZnnD.desiredReplicas;
+    M.kubeZnnD.minReplicas < M.kubeZnnD.desiredReplicas && isStable;
   }
   action {
-    M.scaleDown(M.kubeZnnD, count);
+    M.scaleDown(M.kubeZnnD, 1);
   }
-  effect @[5000] {
-    replicas' - count == M.kubeZnnD.desiredReplicas;
+  effect @[10000] {
+    futureReplicas' == M.kubeZnnD.desiredReplicas;
   }
 }
 
 tactic lowerFidelity() {
   condition {
-    highMode;
+    highMode && isStable;
   }
   action {
     M.rollOut(M.kubeZnnD, "znn", lowModeImage);
@@ -47,7 +49,7 @@ tactic lowerFidelity() {
 
 tactic raiseFidelity() {
   condition {
-    lowMode;
+    lowMode && isStable;
   }
   action {
     M.rollOut(M.kubeZnnD, "znn", highModeImage);

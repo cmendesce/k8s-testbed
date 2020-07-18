@@ -2,11 +2,12 @@ module kubow.strategies;
 import model "KubeZnnSystem:Acme" { KubeZnnSystem as M, KubernetesFam as K };
 import lib "tactics.s";
 
-define boolean lowMode = M.kubeZnnD.replicasLow == M.kubeZnnD.desiredReplicas;
-define boolean highMode = M.kubeZnnD.replicasHigh == M.kubeZnnD.desiredReplicas;
+define boolean lowMode = M.kubeZnnD.replicasLow >= M.kubeZnnD.desiredReplicas;
+define boolean highMode = M.kubeZnnD.replicasHigh >= M.kubeZnnD.desiredReplicas;
 
-define boolean sloRed = M.kubeZnnS.slo < M.kubeZnnS.expectedSlo;
-define boolean sloGreen = M.kubeZnnS.slo >= M.kubeZnnS.desiredSlo;
+define boolean sloRed = M.kubeZnnS.slo < 0.95;
+define boolean sloGreen = M.kubeZnnS.slo > 0.97;
+define boolean sloYellow = M.kubeZnnS.slo <= 0.99 && M.kubeZnnS.slo >= 0.95;
 
 define boolean canAddReplica = M.kubeZnnD.maxReplicas > M.kubeZnnD.desiredReplicas;
 define boolean canRemoveReplica = M.kubeZnnD.minReplicas < M.kubeZnnD.desiredReplicas;
@@ -15,7 +16,7 @@ define boolean canRemoveReplica = M.kubeZnnD.minReplicas < M.kubeZnnD.desiredRep
  * ----
  */
 strategy ImproveSlo [ sloRed ] {
-  t0: (sloRed && canAddReplica) -> addReplicas(1) @[20000 /*ms*/] {
+  t0: (sloRed && canAddReplica) -> addReplica() @[20000 /*ms*/] {
     t0a: (success) -> done;
   }
   t1: (sloRed && !canAddReplica) -> lowerFidelity() @[20000 /*ms*/] {
@@ -28,7 +29,7 @@ strategy ImproveSlo [ sloRed ] {
  * ----
  */
 strategy ReduceCost [ sloGreen && highMode ] {
-  t0: (sloGreen && canRemoveReplica && highMode) -> removeReplicas(1) @[20000 /*ms*/] {
+  t0: (sloGreen && canRemoveReplica && highMode) -> removeReplica() @[20000 /*ms*/] {
     t0a: (success) -> done;
   }
   t1: (default) -> TNULL;
