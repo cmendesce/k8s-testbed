@@ -36,6 +36,10 @@ spec:
       - image: cmendes/kubow:yellow
         name: kubow
         imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
         env:
         - name: USER_DIR
           value: "/usr/share/kubow"
