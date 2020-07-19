@@ -5,8 +5,8 @@ import lib "tactics.s";
 define boolean lowMode = M.kubeZnnD.replicasLow >= M.kubeZnnD.desiredReplicas;
 define boolean highMode = M.kubeZnnD.replicasHigh >= M.kubeZnnD.desiredReplicas;
 
-define boolean sloRed = M.kubeZnnS.slo < 0.95;
-define boolean sloGreen = M.kubeZnnS.slo > 0.97;
+define boolean sloRed = M.kubeZnnS.slo < 0.97;
+define boolean sloGreen = M.kubeZnnS.slo >= 0.97;
 define boolean sloYellow = M.kubeZnnS.slo <= 0.99 && M.kubeZnnS.slo >= 0.95;
 
 define boolean canAddReplica = M.kubeZnnD.maxReplicas > M.kubeZnnD.desiredReplicas;

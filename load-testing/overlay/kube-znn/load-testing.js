@@ -1,80 +1,20 @@
 import http from 'k6/http';
-import { check, sleep } from "k6";
+import { check, sleep } from 'k6';
 
 const epochSeconds = () => new Date().getTime() / 1000;
 
-const steps = [250, 350, 450];
-
 export let options = {
   teardownTimeout: '100s',
-  /**
-   *           _____
-   *     _____|     |_____
-   * ___|                 |___
-   * 
-   */
-  stages: [
-    {
-      duration: '10s',
-      target: 100
-    },
-    {
-      duration: '50s',
-      target: 100
-    },
-    {
-      duration: '10s',
-      target: 150
-    },
-    {
-      duration: '50s',
-      target: 150
-    },
-    {
-      duration: '10s',
-      target: 200
-    },
-    {
-      duration: '50s',
-      target: 200
-    },
-    {
-      duration: '10s',
-      target: 250
-    },
-    {
-      duration: '50s',
-      target: 250
-    },
-    {
-      duration: '10s',
-      target: 300
-    },
-    {
-      duration: '50s',
-      target: 300
-    },
-    {
-      duration: '10s',
-      target: 200
-    },
-    {
-      duration: '50s',
-      target: 200
-    },
-    {
-      duration: '10s',
-      target: 100
-    },
-    {
-      duration: '50s',
-      target: 100
-    },
-    {
-      duration: '10s',
+   stages: [
+     {
+       duration: '180s',
+       target: 500
+     },
+     {
+      duration: '180s',
       target: 0
     }
-  ]
+   ]
 };
 
 export function setup() {
