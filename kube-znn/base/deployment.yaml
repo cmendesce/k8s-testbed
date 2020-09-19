@@ -4,18 +4,17 @@ metadata:
   name: kube-znn
   labels:
     app: kube-znn
+    version: v1
 spec:
   selector:
     matchLabels:
       app: kube-znn
-  strategy:
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
+      version: v1
   template:
     metadata:
       labels:
         app: kube-znn
+        version: v1
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9145"

@@ -67,6 +67,16 @@ gauge-instances:
     configValues:
       targetProbeType: default-kube-znn-replicasLow@*
 
+  ReplicasTextGauge:
+    type: KubowGaugeT
+    model: "KubeZnnSystem:Acme"
+    commands:
+      "setDeploymentProperty()": "kubeZnnD.setDeploymentProperty($<jsonValue>,<replicasText>)"
+    setupValues:
+      targetIP: "127.0.0.1"
+    configValues:
+      targetProbeType: default-kube-znn-replicasText@*
+
   StabilityGauge:
     type: KubowGaugeT
     model: "KubeZnnSystem:Acme"

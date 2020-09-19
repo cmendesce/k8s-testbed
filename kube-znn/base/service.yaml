@@ -12,3 +12,4 @@ spec:
       protocol: TCP
   selector:
     app: kube-znn
+  type: LoadBalancer

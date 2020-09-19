@@ -22,10 +22,11 @@ System KubeZnnSystem : KubernetesFam = new KubernetesFam extended with {
     Property namespace = "default";
     Property hasAlternativeImages = true;
     Property maxReplicas = 3;
-    Property alternativeImages = <"cmendes/kube-znn:400k","cmendes/kube-znn:600k">;
+    Property alternativeImages = <"cmendes/kube-znn:text", "cmendes/kube-znn:200k","cmendes/kube-znn:600k">;
     Property name = "kube-znn";
     Property replicasHigh = 0;
     Property replicasLow = 0;
+    Property replicasText = 0;
     Property stability = 0;
 
   }

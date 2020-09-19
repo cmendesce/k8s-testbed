@@ -1,18 +1,20 @@
 module kubow.strategies;
 import model "KubeZnnSystem:Acme" { KubeZnnSystem as M, KubernetesFam as K };
 
-define boolean lowMode = M.kubeZnnD.replicasLow == M.kubeZnnD.desiredReplicas;
-define boolean highMode = M.kubeZnnD.replicasHigh == M.kubeZnnD.desiredReplicas;
+define boolean textMode = M.kubeZnnD.replicasText >= M.kubeZnnD.desiredReplicas;
+define boolean lowMode = M.kubeZnnD.replicasLow >= M.kubeZnnD.desiredReplicas;
+define boolean highMode = M.kubeZnnD.replicasHigh >= M.kubeZnnD.desiredReplicas;
 
 define string highModeImage = "cmendes/znn:600k";
-define string lowModeImage = "cmendes/znn:400k";
+define string lowModeImage = "cmendes/znn:200k";
+define string textModeImage = "cmendes/znn:text";
 
 define boolean isStable = M.kubeZnnD.stability == 0;
 
 tactic addReplica() {
   int futureReplicas = M.kubeZnnD.desiredReplicas + 1;
   condition {
-    M.kubeZnnD.maxReplicas > M.kubeZnnD.desiredReplicas && isStable;
+    M.kubeZnnD.maxReplicas > M.kubeZnnD.desiredReplicas;
   }
   action {
     M.scaleUp(M.kubeZnnD, 1);
@@ -25,7 +27,7 @@ tactic addReplica() {
 tactic removeReplica() {
   int futureReplicas = M.kubeZnnD.desiredReplicas - 1;
   condition {
-    M.kubeZnnD.minReplicas < M.kubeZnnD.desiredReplicas && isStable;
+    isStable && M.kubeZnnD.minReplicas < M.kubeZnnD.desiredReplicas;
   }
   action {
     M.scaleDown(M.kubeZnnD, 1);
@@ -37,10 +39,15 @@ tactic removeReplica() {
 
 tactic lowerFidelity() {
   condition {
-    highMode && isStable;
+    highMode || lowMode;
   }
   action {
-    M.rollOut(M.kubeZnnD, "znn", lowModeImage);
+    if (highMode) {
+      M.rollOut(M.kubeZnnD, "znn", lowModeImage);
+    }
+    if (lowMode) {
+      M.rollOut(M.kubeZnnD, "znn", textModeImage);
+    }
   }
   effect @[10000] {
     lowMode;
@@ -49,13 +56,18 @@ tactic lowerFidelity() {
 
 tactic raiseFidelity() {
   condition {
-    lowMode && isStable;
+    isStable && !highMode;
   }
   action {
-    M.rollOut(M.kubeZnnD, "znn", highModeImage);
+    if (textMode) {
+      M.rollOut(M.kubeZnnD, "znn", lowModeImage);
+    }
+    if (lowMode) {
+      M.rollOut(M.kubeZnnD, "znn", highModeImage);
+    }
   }
   effect @[10000] {
-    highMode;
+    highMode || lowMode;
   }
 }
 
